@@ -26,7 +26,7 @@ public class Task implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Category category;
 	@Enumerated(EnumType.STRING)
-	private StatusTask status = StatusTask.PENDING;
+	private StatusTask status;
 	
 	public Task() {
 		

@@ -1,6 +1,5 @@
 package br.edu.ifpb.dac.nataly.projetocrud2.presentation.control;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.edu.ifpb.dac.nataly.projetocrud2.business.service.CategoryService;
 import br.edu.ifpb.dac.nataly.projetocrud2.business.service.impl.ConverterService;
 import br.edu.ifpb.dac.nataly.projetocrud2.model.entity.Category;
-import br.edu.ifpb.dac.nataly.projetocrud2.model.entity.Task;
 import br.edu.ifpb.dac.nataly.projetocrud2.presentation.dto.CategoryDto;
-import br.edu.ifpb.dac.nataly.projetocrud2.presentation.dto.TaskDto;
 
 @RestController
 @RequestMapping("/api/category")

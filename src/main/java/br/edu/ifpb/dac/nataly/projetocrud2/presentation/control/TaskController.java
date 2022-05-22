@@ -20,12 +20,13 @@ import br.edu.ifpb.dac.nataly.projetocrud2.business.service.TaskService;
 import br.edu.ifpb.dac.nataly.projetocrud2.business.service.impl.ConverterService;
 import br.edu.ifpb.dac.nataly.projetocrud2.model.entity.Category;
 import br.edu.ifpb.dac.nataly.projetocrud2.model.entity.Task;
+import br.edu.ifpb.dac.nataly.projetocrud2.model.enums.StatusTask;
 import br.edu.ifpb.dac.nataly.projetocrud2.presentation.dto.TaskDto;
 
 @RestController
 @RequestMapping("/api/task")
 public class TaskController {
-	
+
 	@Autowired
 	private ConverterService converterService;
 	@Autowired
@@ -35,17 +36,18 @@ public class TaskController {
 	
 	@PostMapping
 	public ResponseEntity save(@RequestBody TaskDto dto) {
+
 		try {
 			
 			if (dto.getCategoryId() == null) {
-				throw new IllegalStateException("departamentId cannot be null");
+				throw new IllegalStateException("categoryId cannot be null");
 			}	
 			
 			Long categoryId = dto.getCategoryId();
 			Category category = categoryService.findById(categoryId);
 			
 			if(category == null) {
-				throw new IllegalStateException(String.format("Cound not find any departament with id=%1", categoryId));
+				throw new IllegalStateException(String.format("Cound not find any category with id=%1", categoryId));
 			}
 			
 			Task entity = converterService.dtoToTask(dto);
@@ -59,84 +61,86 @@ public class TaskController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
-	
+
 	@PutMapping("{id}")
 	public ResponseEntity update(@PathVariable("id") Long id, @RequestBody TaskDto dto) {
 		try {
 			dto.setId(id);
 			Long categoryId = dto.getCategoryId();
 			Category category = categoryService.findById(categoryId);
-			
-			if(category == null) {
+
+			if (category == null) {
 				throw new IllegalStateException(String.format("Cound not find any departament with id=%1", id));
 			}
-			
+
 			Task entity = converterService.dtoToTask(dto);
 			entity.setCategory(category);
 			entity = taskService.update(entity);
 			dto = converterService.taskToDto(entity);
-			
+
 			return ResponseEntity.ok(dto);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
-	
+
 	@DeleteMapping("{id}")
 	public ResponseEntity delete(@PathVariable("id") Long id) {
 		try {
 			taskService.delete(id);
-			
+
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
-	
+
 	@GetMapping
-	public ResponseEntity find (
-				@RequestParam(value = "id", required = false) Long id,
-				@RequestParam(value = "description", required = false) String description,
-				@RequestParam(value = "priority", required = false) String priority,
-				@RequestParam(value = "categoryId", required = false) Long categoryId
-			) {
-		
+	public ResponseEntity findByFilter(@RequestParam(value = "id", required = false) Long id,
+			@RequestParam(value = "description", required = false) String description,
+			@RequestParam(value = "priority", required = false) String priority,
+			@RequestParam(value = "categoryId", required = false) Long categoryId,
+			@RequestParam(value = "status", required = false) StatusTask status
+
+	) {
+
 		try {
-			
+
 			Task filter = new Task();
 			filter.setId(id);
 			filter.setDescription(description);
 			filter.setPriority(priority);
-			
+			filter.setStatus(status);
+
 			Category category = categoryService.findById(categoryId);
-			
-			if(category == null) {
-				throw new IllegalStateException(String.format("Cound not find any departament whit id=%1", categoryId));
+
+			if (category == null) {
+				throw new IllegalStateException(String.format("Cound not find any category whit id=%1", categoryId));
 			}
-			
+
 			filter.setCategory(category);
-			
+
 			List<Task> entities = taskService.find(filter);
 			List<TaskDto> dtos = converterService.taskToDto(entities);
-			
+
 			return ResponseEntity.ok(dtos);
-			
-		} catch(Exception e) {
+
+		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
-	
+
 	@GetMapping("/all")
 	public List<Task> findAll() throws Exception {
 
-		List<Task> result = taskService.findAll();
+		List<Task> list = taskService.findAll();
 
-		if (result.isEmpty()){
+		if (list.isEmpty()) {
 			throw new Exception("List is empty!");
 
 		} else {
-			return taskService.findAll();	
+			return taskService.findAll();
 		}
 	}
-	
+
 }

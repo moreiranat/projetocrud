@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import br.edu.ifpb.dac.nataly.projetocrud2.model.entity.Task;
+import br.edu.ifpb.dac.nataly.projetocrud2.model.enums.StatusTask;
 import br.edu.ifpb.dac.nataly.projetocrud2.model.repository.TaskRepository;
 
 public class TaskDto {
@@ -12,6 +13,7 @@ public class TaskDto {
 	private String description;
 	private String priority;
 	private Long categoryId;
+	private StatusTask status;
 
 	public TaskDto() {
 
@@ -22,6 +24,7 @@ public class TaskDto {
 		this.description = task.getDescription();
 		this.priority = task.getPriority();
 		this.categoryId = task.getCategory().getId();
+		this.status = task.getStatus();
 	}
 
 	public Long getId() {
@@ -54,6 +57,14 @@ public class TaskDto {
 
 	public void setCategoryId(Long categoryId) {
 		this.categoryId = categoryId;
+	}
+
+	public StatusTask getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusTask status) {
+		this.status = status;
 	}
 
 	public static List<TaskDto> converter(List<Task> tasks) {

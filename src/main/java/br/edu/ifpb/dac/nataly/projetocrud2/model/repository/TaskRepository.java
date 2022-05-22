@@ -6,6 +6,4 @@ import br.edu.ifpb.dac.nataly.projetocrud2.model.entity.Task;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
-	//Task findByNome(String categoryName);
-
 }

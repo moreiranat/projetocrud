@@ -39,12 +39,14 @@ public class ConverterService {
 		dto.setId(task.getId());
 		dto.setDescription(task.getDescription());
 		dto.setPriority(task.getPriority());
+		dto.setStatus(task.getStatus());
 		dto.setCategoryId(task.getCategory().getId());
 		
 		return dto;
 	}
 
 	public Task dtoToTask(TaskDto dto) {
+		
 		//Optional<Category> category = categoryService.findById(dto.getCategoryId()); 
 
 		Task task = new Task();
@@ -52,8 +54,9 @@ public class ConverterService {
 		task.setId(dto.getId());
 		task.setDescription(dto.getDescription());
 		task.setPriority(dto.getPriority());
-//		task.setCategory(dto.getCategoryId()); 
-//		task.setCategory((categoryService.findById(dto.getCategoryId())));
+		task.setStatus(dto.getStatus());
+		task.setCategory((categoryService.findById(dto.getCategoryId())));
+//		task.setCategoryId(dto.getCategory().getId()); 
 		
 		return task;
 	}
